@@ -1,7 +1,8 @@
 package model.card;
+
 /*
  * @filename: Card.java
- * @author: Ykahil
+ * @author: Ykahil, YousifMuziel
  *
  * Abstract representation of a Card object with its playable abstract methods and effects
  */
@@ -11,12 +12,12 @@ import exceptions.IllegalMultiplierException;
 import model.Intention;
 
 public abstract class Card {
-    String name;
-    Intention type;
-    int statAmount; // represents the "strength" of the card, e.g. 3 attack, 4 block, buff attack by 3, etc.
-    int cost;
-    String description;
-    double statMultiplier; // (default to 1) modifies statAmount by statAmount * statMultiplier, needs to be decimal
+    private String name;
+    private Intention type;
+    private int statAmount; // represents the "strength" of the card, e.g. 3 attack, 4 block, buff attack by 3, etc.
+    private int cost;
+    private String description;
+    private double statMultiplier; // (default to 1) modifies statAmount by statAmount * statMultiplier, needs to be decimal
 
     // EFFECTS: Constructs a new card without any givens (null type and placeholders)
     public Card() {
@@ -53,38 +54,38 @@ public abstract class Card {
     */
 
     // EFFECTS: returns the name of the card
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
     // EFFECTS: returns the type of the card
-    Intention getType() {
+    public Intention getType() {
         return this.type;
     }
 
     // EFFECTS: returns the stat amount of the card considering statMultiplier
-    int getStatAmount() {
+    public int getStatAmount() {
         return (int) Math.ceil(this.statAmount * statMultiplier);
     }
 
 
     // EFFECTS: returns the base stat amount of the card
-    int getBaseStatAmount() {
+    public int getBaseStatAmount() {
         return this.statAmount;
     }
 
     // EFFECTS: returns the energy cost of the card
-    int getCost() {
+    public int getCost() {
         return this.cost;
     }
 
     // EFFECTS: returns the description of the card
-    String getDescription() {
+    public String getDescription() {
         return this.description;
     }
 
     // EFFECTS: returns the stat multiplier of the card
-    double getStatMultiplier() {
+    public double getStatMultiplier() {
         return this.statMultiplier;
     }
 
@@ -94,26 +95,26 @@ public abstract class Card {
 
     // MODIFIES: this
     // EFFECTS: sets the card's name to given name
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
     // MODIFIES: this
     // EFFECTS: sets the card's type to given type
-    void setType(Intention type) {
+    public void setType(Intention type) {
         this.type = type;
     }
 
     // MODIFIES: this
     // EFFECTS: sets the card's attributeAmount to given amount
-    void setStatAmount(int amount) {
+    public void setStatAmount(int amount) {
         this.statAmount = amount;
     }
 
     // MODIFIES: this
     // EFFECTS: if cost < 0, throws IllegalCostException
     //          otherwise, sets the card's cost to given cost
-    void setCost(int cost) throws IllegalCostException {
+    public void setCost(int cost) throws IllegalCostException {
         if (cost < 0) {
             throw new IllegalCostException();
         } else {
@@ -123,14 +124,14 @@ public abstract class Card {
 
     // MODIFIES: this
     // EFFECTS: sets the card's description to given description
-    void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
     // MODIFIES: this
     // EFFECTS: if multiplier < 0, throws IllegalMultiplierException
     //          otherwise, sets the card's buffMultiplier to given multiplier
-    void setStatMultiplier(double multiplier) throws IllegalMultiplierException {
+    public void setStatMultiplier(double multiplier) throws IllegalMultiplierException {
         if (multiplier < 0) {
             throw new IllegalMultiplierException();
         } else {
