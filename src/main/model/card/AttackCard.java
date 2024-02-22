@@ -16,6 +16,9 @@ public class AttackCard extends Card {
         super(name, Intention.ATTACK, statAmount, cost, description);
     }
 
-
+    // EFFECTS: constructs an Attack type card with given name, statAmount, cost, and blank description
+    public AttackCard(String name, int statAmount, int cost) {
+        super(name, Intention.ATTACK, statAmount, cost);
+    }
 
 }
