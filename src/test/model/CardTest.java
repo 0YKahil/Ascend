@@ -98,6 +98,4 @@ public class CardTest {
         assertEquals(1.25, ac.getStatMultiplier());
         assertEquals(8, ac.getStatAmount());
     }
-
-
 }

@@ -17,7 +17,7 @@ public abstract class Card {
     private int statAmount; // represents the "strength" of the card, e.g. 3 attack, 4 block, buff attack by 3, etc.
     private int cost;
     private String description;
-    private double statMultiplier; // (default to 1) modifies statAmount by statAmount * statMultiplier, needs to be decimal
+    private double statMultiplier; // (default 1) modify statAmount by statAmount * statMultiplier, needs to be decimal
 
     // EFFECTS: Constructs a new card without any givens (null type and placeholders)
     public Card() {
