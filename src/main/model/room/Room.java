@@ -1,110 +1,96 @@
 package model.room;
 
-/*
- * @filename: Room.java
- * @author: YousifMuziel, Ykahil
- *
- * Abstract representation of the Room class object with its abstract methods
- */
-
-import model.player.Player;
 import model.enemy.Enemy;
+import model.player.Player;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
-// Room is an abstract class instances cant be created directly.
+/**
+ * Base class for every room in the tower.
+ *
+ * <p>A room owns its enemy list. Subclasses can populate the room by calling
+ * {@link #addEnemy(Enemy)} after the {@code Room} constructor has completed.</p>
+ */
 public abstract class Room {
-    private String type; // Type of room
-    private int difficulty; // Difficulty level of the room.
-    private boolean isElite; // Indicating whether the room is an elite room.
-    private ArrayList<Enemy> enemies; // Enemy being the defined class .
+    private String type;
+    private int difficulty;
+    private boolean elite;
+    private final List<Enemy> enemies;
 
-    // Constructor
-    public Room(String type, int difficulty, boolean isElite) {
-        this.type = type;
-        this.difficulty = difficulty;
-        this.isElite = isElite;
-        this.enemies = new ArrayList<Enemy>(); // Initializing the list of enemies.
-        initializeEnemies();
+    protected Room(String type, int difficulty, boolean elite) {
+        this.type = Objects.requireNonNull(type, "type cannot be null");
+        setDifficulty(difficulty);
+        this.elite = elite;
+        this.enemies = new ArrayList<>();
     }
 
-    // Getters and setters for type
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = Objects.requireNonNull(type, "type cannot be null");
     }
 
-    // Getters and setters for difficulty
     public int getDifficulty() {
         return difficulty;
     }
 
     public void setDifficulty(int difficulty) {
+        if (difficulty < 1) {
+            throw new IllegalArgumentException("difficulty must be at least 1");
+        }
         this.difficulty = difficulty;
     }
 
-    // Getters and setters for isElite
     public boolean isElite() {
-        return isElite;
+        return elite;
     }
 
     public void setElite(boolean elite) {
-        isElite = elite;
+        this.elite = elite;
     }
 
-    // Getters and setters for enemies
-    public ArrayList<Enemy> getEnemies() {
-        return enemies;
+    /**
+     * Returns a read-only view of the enemies currently in this room.
+     */
+    public List<Enemy> getEnemies() {
+        return Collections.unmodifiableList(enemies);
     }
 
-    public void setEnemies(ArrayList<Enemy> enemies) {
-        this.enemies = enemies;
-    }
-
-    // Method to add an enemy to the room
     public void addEnemy(Enemy enemy) {
-        enemies.add(enemy);
+        enemies.add(Objects.requireNonNull(enemy, "enemy cannot be null"));
     }
 
-    // Abstract method that can be implemented by subclasses.
-
-    protected void initializeEnemies() {
-        /*
-         Initialize enemies based on room difficulty and elite status
-
-         if (isElite) {
-             enemies.add(new EliteEnemy(difficulty));
-         } else {
-             enemies.add(new NormalEnemy(difficulty));
-         }
-        */
+    public boolean removeEnemy(Enemy enemy) {
+        return enemies.remove(enemy);
     }
 
-    public abstract void enterRoom(Player player); // Player class that will be defined.
+    public boolean hasEnemies() {
+        return !enemies.isEmpty();
+    }
+
+    public void clearEnemies() {
+        enemies.clear();
+    }
+
+    public abstract void enterRoom(Player player);
 
     public void displayRoomDetails() {
-        // Room details
         System.out.println("Room type: " + type);
         System.out.println("Difficulty level: " + difficulty);
-        System.out.println("Is Elite: " + isElite);
+        System.out.println("Is elite: " + elite);
         System.out.println("Enemies present: " + enemies.size());
-        // Other details to be included
     }
 
     public void onEnter() {
-        // Code to handle room entry
+        // Optional hook for subclasses.
     }
 
     public void onExit() {
-        // Code to handle room exit
+        // Optional hook for subclasses.
     }
 }
-
-
-
-
-
-
-

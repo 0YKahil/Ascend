@@ -1,57 +1,111 @@
 package model;
 
-/*
- * @filename: Room.java
- * @author: YousifMuziel, Ykahil
- *
- * Abstract representation of the Room class object with its abstract methods
- */
-
-import model.player.Player;
 import model.enemy.Enemy;
+import model.player.Player;
+import model.room.BattleRoom;
+import model.room.ChestRoom;
+import model.room.EliteRoom;
+import model.room.RestRoom;
+import model.room.Room;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class RoomTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+class RoomTest {
     private Room room;
-    private Player player;
     private Enemy enemy;
 
     @BeforeEach
     void setUp() {
-        // Initialize a concrete Room class, which in this case is a mock implementation for testing.
-        room = new Room("TestRoom", 1, false) {
+        room = new Room("Test Room", 1, false) {
             @Override
             public void enterRoom(Player player) {
+                onEnter();
             }
         };
-
-        player = new Player("TestPlayer", 1, 100, 10); // Assuming parameters for Player
-        enemy = new Enemy("TestEnemy", 50, false, 1); // Assuming parameters for Enemy
-        room.addEnemy(enemy); // Adding an enemy to the room for the test
+        enemy = new Enemy();
     }
 
     @Test
-    void testRoomType() {
-        assertEquals("TestRoom", room.getType());
-    }
-
-    @Test
-    void testRoomDifficulty() {
+    void constructorSetsRoomProperties() {
+        assertEquals("Test Room", room.getType());
         assertEquals(1, room.getDifficulty());
+        assertFalse(room.isElite());
+        assertFalse(room.hasEnemies());
     }
 
     @Test
-    void testIsElite() {
-        assertFalse(room.isElite()); //
-    }
+    void addEnemyAddsEnemyToRoom() {
+        room.addEnemy(enemy);
 
-    @Test
-    void testAddEnemy() {
-        assertEquals(1, room.getEnemies().size()); // Expecting one enemy
+        assertTrue(room.hasEnemies());
+        assertEquals(1, room.getEnemies().size());
         assertTrue(room.getEnemies().contains(enemy));
     }
 
+    @Test
+    void addEnemyRejectsNull() {
+        assertThrows(NullPointerException.class, () -> room.addEnemy(null));
+    }
+
+    @Test
+    void removeEnemyRemovesExistingEnemy() {
+        room.addEnemy(enemy);
+
+        assertTrue(room.removeEnemy(enemy));
+        assertFalse(room.hasEnemies());
+    }
+
+    @Test
+    void removeEnemyReturnsFalseWhenEnemyIsNotPresent() {
+        assertFalse(room.removeEnemy(enemy));
+    }
+
+    @Test
+    void clearEnemiesRemovesEveryEnemy() {
+        room.addEnemy(enemy);
+        room.addEnemy(new Enemy());
+
+        room.clearEnemies();
+
+        assertTrue(room.getEnemies().isEmpty());
+    }
+
+    @Test
+    void enemyListCannotBeModifiedDirectly() {
+        assertThrows(UnsupportedOperationException.class,
+                () -> room.getEnemies().add(enemy));
+    }
+
+    @Test
+    void difficultyMustBePositive() {
+        assertThrows(IllegalArgumentException.class,
+                () -> room.setDifficulty(0));
+        assertThrows(IllegalArgumentException.class,
+                () -> new BattleRoom(-1));
+    }
+
+    @Test
+    void roomTypeCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> room.setType(null));
+    }
+
+    @Test
+    void concreteRoomsHaveExpectedProperties() {
+        Room battleRoom = new BattleRoom(2);
+        Room eliteRoom = new EliteRoom(3);
+        Room chestRoom = new ChestRoom(1);
+        Room restRoom = new RestRoom(1);
+
+        assertEquals("Battle", battleRoom.getType());
+        assertFalse(battleRoom.isElite());
+        assertEquals("Elite", eliteRoom.getType());
+        assertTrue(eliteRoom.isElite());
+        assertEquals("Chest", chestRoom.getType());
+        assertEquals("Rest", restRoom.getType());
+    }
 }

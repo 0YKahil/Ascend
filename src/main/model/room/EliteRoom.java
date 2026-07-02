@@ -1,5 +1,7 @@
 package model.room;
 
+import model.player.Player;
+
 /*
  * @filename: Room.java
  * @author: YousifMuziel, Ykahil
@@ -8,4 +10,12 @@ package model.room;
  */
 
 public class EliteRoom extends Room {
+    public EliteRoom(int difficulty) {
+        super("Elite", difficulty, true);
+    }
+
+    @Override
+    public void enterRoom(Player player) {
+        onEnter();
+    }
 }

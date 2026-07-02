@@ -1,5 +1,7 @@
 package model.card;
 
+import model.Intention;
+
 /*
  * @filename: DefendCard.java
  * @author: Ykahil, YousifMuziel
@@ -8,5 +10,11 @@ package model.card;
  */
 
 public class DefendCard extends Card {
+    public DefendCard(String name, int statAmount, int cost, String description) {
+        super(name, Intention.DEFEND, statAmount, cost, description);
+    }
 
+    public DefendCard(String name, int statAmount, int cost) {
+        super(name, Intention.DEFEND, statAmount, cost);
+    }
 }
